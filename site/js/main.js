@@ -166,10 +166,18 @@
   const form = $('.contact-form', modal);
   const done = $('.modal-done', modal);
   const submitBtn = $('button[type=submit]', form);
-  const funeralNotice = $('[data-funeral-notice]', form);
-  const FIELDS = ['name', 'kana', 'email', 'email2', 'tel', 'contact', 'kind', 'agree', 'submit'];
+  const fromNotice = $('[data-from-notice]', form);
+  // 開いたボタンごとの案内文・初期選択・ご相談内容の先頭に付ける見出し
+  const FROM = {
+    funeral: { notice: '葬儀社さまからのお問い合わせとして承ります。', prefix: '【葬儀社さまからのお問い合わせ】' },
+    booklet: {
+      notice: '冊子『大切な人を亡くしたあとに起こることについて』のお申し込みとして承ります。お送り先のご住所を「お問い合わせ・ご相談内容」にご記入ください。',
+      prefix: '【冊子のお申し込み】', kind: '資料を送ってほしい', needsAddress: true
+    }
+  };
+  const FIELDS = ['name', 'kana', 'email', 'email2', 'tel', 'contact', 'kind', 'body', 'agree', 'submit'];
   const chipValue = {};
-  let fromFuneral = false;
+  let from = null;
   let lastFocus = null;
 
   const setChip = (group, value) => {
@@ -214,13 +222,15 @@
   };
   $('[data-form-notice]', form).hidden = formReady;
 
-  const openModal = from => {
+  const openModal = key => {
     lastFocus = document.activeElement;
     form.reset();
     FIELDS.forEach(n => setError(n, ''));
     ['contact', 'kind', 'size', 'material'].forEach(g => setChip(g, null));
-    fromFuneral = from === 'funeral';
-    funeralNotice.hidden = !fromFuneral;
+    from = FROM[key] || null;
+    fromNotice.hidden = !from;
+    fromNotice.textContent = from ? from.notice : '';
+    if (from && from.kind) setChip('kind', from.kind);
     form.hidden = false; done.hidden = true;
     resetSubmit();
     setMenu(false);
@@ -267,6 +277,7 @@
     else if (v.contact === 'お電話でのご連絡を希望' && !v.tel.trim()) err.tel = 'お電話でのご連絡には、電話番号が必要です。';
     if (!v.kind) err.kind = 'お問い合わせの種類をお選びください。';
     else if (v.kind === 'その他' && !v.kindOther.trim()) err.kind = 'お問い合わせの内容をご入力ください。';
+    if (from && from.needsAddress && !v.body.trim()) err.body = 'お送り先のご住所をご記入ください。';
     if (!v.agree) err.agree = 'プライバシーポリシーへの同意が必要です。';
     return err;
   };
@@ -288,7 +299,7 @@
     choice('contact', v.contact, v.contactOther);
     choice('kind', v.kind, v.kindOther);
     choice('size', v.size); choice('material', v.material);
-    put('body', (fromFuneral ? '【葬儀社さまからのお問い合わせ】\n' : '') + v.body.trim());
+    put('body', (from ? from.prefix + '\n' : '') + v.body.trim());
     // Googleフォームは CORS を返さないため no-cors で送る。レスポンスの中身は読めない。
     await fetch(action, { method: 'POST', mode: 'no-cors', body: data });
   };

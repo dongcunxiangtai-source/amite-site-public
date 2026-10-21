@@ -129,7 +129,6 @@
           <div class="motif-spec">石座の両側からチェーンを吊るすデザイン</div>
         </div>
 
-        <a href="#" class="text-link">コレクションを見る</a>
       </div>
     </div>
   </section>
@@ -187,7 +186,7 @@
       <div class="eyebrow">BOOKLET</div>
       <h3 class="subheading">はじめての方へ、一冊の冊子を。</h3>
       <p class="body-md">『大切な人を亡くしたあとに起こることについて』<br>見送りのあとに訪れる手続きや気持ちの変化を、全8章にまとめた冊子です。葬儀社さまを通じて、お渡ししています。<br>葬儀社さまを通さずにご希望の方にも、お送りいたします。</p>
-      <a href="#" class="text-link">冊子について</a>
+      <button type="button" class="btn-outline btn-start" data-open-contact="booklet">冊子を申し込む</button>
     </div>
     <div class="info-col info-funeral">
       <div class="eyebrow">FOR FUNERAL HOMES</div>
@@ -256,7 +255,7 @@
     <form class="contact-form" novalidate>
       <p class="form-lead">ご相談は、こちらのフォームより承ります。まだ決めていないことがあっても、構いません。</p>
       <p class="form-notice" data-form-notice hidden>ただいま、フォームからの送信は準備中です。恐れ入りますが、公開までいましばらくお待ちください。</p>
-      <p class="form-notice" data-funeral-notice hidden>葬儀社さまからのお問い合わせとして承ります。</p>
+      <p class="form-notice" data-from-notice hidden></p>
 
       <label class="field"><span class="field-label">お名前 *</span><input name="name" autocomplete="name"><span class="field-err" data-err="name"></span></label>
       <label class="field"><span class="field-label">ふりがな *</span><input name="kana"><span class="field-err" data-err="kana"></span></label>
@@ -311,6 +310,7 @@
         <span class="field-label">お問い合わせ・ご相談内容</span>
         <span class="field-help">些細なご質問や、お品物に対するご要望、現在の状況（四十九日や一周忌を控えているなど）について、ご自由にお書きください。お預かりするご遺骨や毛髪の量（約2〜3グラム）、結晶化に関するご不安など、パンフレットをご覧になって気になった点などもお気軽にご記載ください。</span>
         <textarea name="body" rows="5"></textarea>
+        <span class="field-err" data-err="body"></span>
       </label>
 
       <div class="field">

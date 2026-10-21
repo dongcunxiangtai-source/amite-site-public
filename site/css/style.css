@@ -61,6 +61,7 @@ br.sp-only { display: none; }
   transition: border-color .3s;
 }
 .btn-outline:hover { border-color: var(--c-primary); }
+.btn-start { align-self: flex-start; }
 
 /* ---------- スクロール表示 ---------- */
 .rv { opacity: 0; transform: translateY(28px); transition: opacity 1.4s ease, transform 1.4s ease; }
