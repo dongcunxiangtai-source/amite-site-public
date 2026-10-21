@@ -6,19 +6,25 @@
   const CONFIG = {
     heroAutoplay: true,
     heroInterval: 6000,
-    // Googleフォーム連携。action と entries を埋めると、送信内容がGoogleフォームに記録される。
-    // action: 'https://docs.google.com/forms/d/e/<フォームID>/formResponse'
-    // entries: 各項目に対応する 'entry.123456789'。取得方法は README.md を参照。
+    // Googleフォーム連携（amite お問い合わせ・ご相談フォーム）。
+    // 項目IDは「事前入力したURL」から取得。質問を作り直すとIDが変わるので、その際は取り直す。
     googleForm: {
-      action: '',
+      action: 'https://docs.google.com/forms/d/e/1FAIpQLSfx67u6lJsdsnORJyS6KUsGzm1MZkaZCO_rFj7Bbx_7Rkcyaw/formResponse',
       entries: {
-        type: '',   // ご相談の区分（ご遺族の方 / 葬儀社の方 / その他）
-        name: '',   // お名前
-        email: '',  // メールアドレス
-        tel: '',    // 電話番号
-        home: '',   // ご紹介元の葬儀社名
-        motif: '',  // 気になるモチーフ（鳥 / 花 / 星 / まだ決めていない）
-        body: ''    // ご相談内容
+        name: 'entry.2041938747',     // お名前 *
+        kana: 'entry.990902210',      // ふりがな *
+        email: 'entry.1968972590',    // メールアドレス *
+        tel: 'entry.1928932167',      // 電話番号
+        contact: 'entry.489224955',   // ご連絡方法の希望 *（その他あり）
+        kind: 'entry.1721913068',     // お問い合わせの種類 *（その他あり）
+        size: 'entry.1684426241',     // ご希望のサイズ（現時点でのお考え）
+        material: 'entry.1688603153', // お預かりする素材（現時点でのお考え）
+        body: 'entry.709531915'       // お問い合わせ・ご相談内容
+      },
+      // フォーム側の選択肢に見えない文字（ゼロ幅スペース等）が含まれているもの。選択肢の文言と一字一句一致しないと記録されない。
+      optionText: {
+        'メールでのご連絡を希望': '\u200bメールでのご連絡を希望 \u200b',
+        'まずは相談してみたい（ご質問・ご不安な点など）': '\u200bまずは相談してみたい（ご質問・ご不安な点など）'
       }
     }
   };
@@ -160,9 +166,10 @@
   const form = $('.contact-form', modal);
   const done = $('.modal-done', modal);
   const submitBtn = $('button[type=submit]', form);
-  const familyOnly = $('[data-family-only]', form);
-  const DEFAULTS = { type: 'ご遺族の方', motif: 'まだ決めていない' };
+  const funeralNotice = $('[data-funeral-notice]', form);
+  const FIELDS = ['name', 'kana', 'email', 'email2', 'tel', 'contact', 'kind', 'agree', 'submit'];
   const chipValue = {};
+  let fromFuneral = false;
   let lastFocus = null;
 
   const setChip = (group, value) => {
@@ -172,17 +179,31 @@
       c.classList.toggle('is-on', on);
       c.setAttribute('aria-pressed', String(on));
     });
-    if (group === 'type') familyOnly.hidden = value !== 'ご遺族の方';
+    const other = form.elements[group + 'Other'];
+    if (other) other.hidden = value !== 'その他';
+    setError(group, '');
   };
-  $$('.chip', form).forEach(c => c.addEventListener('click', () => setChip(c.closest('[data-chips]').dataset.chips, c.dataset.value)));
+  $$('.chip', form).forEach(c => c.addEventListener('click', () => {
+    const wrap = c.closest('[data-chips]');
+    const group = wrap.dataset.chips;
+    // 任意項目は、選択中のものをもう一度押すと解除できる
+    const next = wrap.hasAttribute('data-optional') && chipValue[group] === c.dataset.value ? null : c.dataset.value;
+    setChip(group, next);
+    if (next === 'その他') form.elements[group + 'Other'].focus();
+  }));
 
-  const setError = (name, msg) => {
+  function setError(name, msg) {
     const slot = $(`[data-err="${name}"]`, form);
     if (slot) slot.textContent = msg || '';
     const input = form.elements[name];
-    if (input && input.type !== 'checkbox') input.classList.toggle('is-invalid', !!msg);
-  };
-  form.addEventListener('input', e => { if (e.target.name) setError(e.target.name, ''); });
+    if (input && input.type && input.type !== 'checkbox') input.classList.toggle('is-invalid', !!msg);
+  }
+  form.addEventListener('input', e => {
+    const n = e.target.name;
+    if (!n) return;
+    setError(n.replace(/Other$/, ''), '');
+    if (n === 'tel') setError('contact', '');
+  });
   form.addEventListener('change', e => { if (e.target.name === 'agree') setError('agree', ''); });
 
   // 送信先が未設定のあいだは、送れたように見せず「準備中」と表示する
@@ -193,12 +214,13 @@
   };
   $('[data-form-notice]', form).hidden = formReady;
 
-  const openModal = type => {
+  const openModal = from => {
     lastFocus = document.activeElement;
     form.reset();
-    ['name', 'email', 'email2', 'body', 'agree', 'submit'].forEach(n => setError(n, ''));
-    setChip('type', type || DEFAULTS.type);
-    setChip('motif', DEFAULTS.motif);
+    FIELDS.forEach(n => setError(n, ''));
+    ['contact', 'kind', 'size', 'material'].forEach(g => setChip(g, null));
+    fromFuneral = from === 'funeral';
+    funeralNotice.hidden = !fromFuneral;
     form.hidden = false; done.hidden = true;
     resetSubmit();
     setMenu(false);
@@ -235,38 +257,59 @@
   const validate = v => {
     const err = {};
     if (!v.name.trim()) err.name = 'お名前をご入力ください。';
+    if (!v.kana.trim()) err.kana = 'ふりがなをご入力ください。';
     if (!v.email.trim()) err.email = 'メールアドレスをご入力ください。';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) err.email = 'メールアドレスの形式をご確認ください。';
     if (!v.email2.trim()) err.email2 = '確認のため、もう一度ご入力ください。';
     else if (v.email2 !== v.email) err.email2 = 'メールアドレスが一致しません。';
-    if (!v.body.trim()) err.body = 'ご相談内容をご入力ください。';
+    if (!v.contact) err.contact = 'ご連絡方法をお選びください。';
+    else if (v.contact === 'その他' && !v.contactOther.trim()) err.contact = 'ご希望の連絡方法をご入力ください。';
+    else if (v.contact === 'お電話でのご連絡を希望' && !v.tel.trim()) err.tel = 'お電話でのご連絡には、電話番号が必要です。';
+    if (!v.kind) err.kind = 'お問い合わせの種類をお選びください。';
+    else if (v.kind === 'その他' && !v.kindOther.trim()) err.kind = 'お問い合わせの内容をご入力ください。';
     if (!v.agree) err.agree = 'プライバシーポリシーへの同意が必要です。';
     return err;
   };
 
   const sendToGoogleForm = async v => {
-    const { action, entries } = CONFIG.googleForm;
+    const { action, entries: en, optionText } = CONFIG.googleForm;
     const data = new URLSearchParams();
-    Object.entries(entries).forEach(([key, entry]) => { if (entry && v[key] != null) data.append(entry, v[key]); });
+    const put = (key, val) => { if (val) data.append(en[key], val); };
+    const choice = (key, val, other) => {
+      if (!val) return;
+      if (val === 'その他') {
+        data.append(en[key], '__other_option__');
+        data.append(en[key] + '.other_option_response', other.trim());
+      } else {
+        data.append(en[key], optionText[val] || val);
+      }
+    };
+    put('name', v.name.trim()); put('kana', v.kana.trim()); put('email', v.email.trim()); put('tel', v.tel.trim());
+    choice('contact', v.contact, v.contactOther);
+    choice('kind', v.kind, v.kindOther);
+    choice('size', v.size); choice('material', v.material);
+    put('body', (fromFuneral ? '【葬儀社さまからのお問い合わせ】\n' : '') + v.body.trim());
     // Googleフォームは CORS を返さないため no-cors で送る。レスポンスの中身は読めない。
     await fetch(action, { method: 'POST', mode: 'no-cors', body: data });
   };
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
+    if (!formReady) return;
     const el = form.elements;
     const v = {
-      type: chipValue.type, motif: chipValue.motif,
-      name: el.name.value, email: el.email.value, email2: el.email2.value,
-      tel: el.tel.value, home: chipValue.type === 'ご遺族の方' ? el.home.value : '',
+      name: el.name.value, kana: el.kana.value, email: el.email.value, email2: el.email2.value, tel: el.tel.value,
+      contact: chipValue.contact, contactOther: el.contactOther.value,
+      kind: chipValue.kind, kindOther: el.kindOther.value,
+      size: chipValue.size, material: chipValue.material,
       body: el.body.value, agree: el.agree.checked
     };
     const err = validate(v);
-    ['name', 'email', 'email2', 'body', 'agree', 'submit'].forEach(n => setError(n, err[n]));
-    if (!formReady) return;
-    if (Object.keys(err).length) {
-      const firstBad = ['name', 'email', 'email2', 'body', 'agree'].find(n => err[n]);
-      el[firstBad].focus();
+    FIELDS.forEach(n => setError(n, err[n]));
+    const firstBad = FIELDS.find(n => err[n]);
+    if (firstBad) {
+      const target = el[firstBad] || $(`[data-chips="${firstBad}"] .chip`, form);
+      target.focus();
       return;
     }
     submitBtn.disabled = true; submitBtn.textContent = '送信中…';

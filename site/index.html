@@ -24,7 +24,7 @@
     <a href="#process" data-scroll="process">Process</a>
     <a href="#funeral" data-scroll="funeral">For Funeral Homes</a>
     <a href="#" data-noop>FAQ</a>
-    <a href="#contact" data-open-contact="ご遺族の方">Contact</a>
+    <a href="#contact" data-open-contact>Contact</a>
   </nav>
 </header>
 
@@ -194,7 +194,7 @@
       <h3 class="subheading">amiteは、お客様からの<br>ご紹介を大切にしています。</h3>
       <div class="fh-actions">
         <a href="#" class="text-link" data-toggle="fh" data-hover-open aria-expanded="false" aria-controls="fh" data-label-open="葬儀社の方へ" data-label-close="閉じる">葬儀社の方へ</a>
-        <button type="button" class="btn-outline" data-open-contact="葬儀社の方">葬儀社さまのお問い合わせ</button>
+        <button type="button" class="btn-outline" data-open-contact="funeral">葬儀社さまのお問い合わせ</button>
       </div>
       <div class="disclosure-panel" id="fh">
         <div class="fh-message">
@@ -214,7 +214,7 @@
   <section class="contact rv" id="contact" data-reveal>
     <h2 class="display">Contact</h2>
     <p>急がなくて、大丈夫です。<br>四十九日や納骨の頃、少し落ち着いてからでも。<br>まだ決めきれないことも、そのままご相談ください。</p>
-    <button type="button" class="btn-primary" data-open-contact="ご遺族の方">相談する</button>
+    <button type="button" class="btn-primary" data-open-contact>相談する</button>
   </section>
 </main>
 
@@ -227,7 +227,7 @@
     <div class="footer-links">
       <div class="footer-col">
         <div class="footer-col-title">Information</div>
-        <a href="#contact" data-open-contact="ご遺族の方">お問い合わせ</a>
+        <a href="#contact" data-open-contact>お問い合わせ</a>
         <a href="#">よくある質問</a>
         <a href="#">プライバシーポリシー</a>
         <a href="#">特定商取引法に基づく表記</a>
@@ -256,33 +256,62 @@
     <form class="contact-form" novalidate>
       <p class="form-lead">ご相談は、こちらのフォームより承ります。まだ決めていないことがあっても、構いません。</p>
       <p class="form-notice" data-form-notice hidden>ただいま、フォームからの送信は準備中です。恐れ入りますが、公開までいましばらくお待ちください。</p>
-
-      <fieldset class="field">
-        <legend class="field-label">ご相談の区分 *</legend>
-        <div class="chips" data-chips="type">
-          <button type="button" class="chip is-on" data-value="ご遺族の方" aria-pressed="true">ご遺族の方</button>
-          <button type="button" class="chip" data-value="葬儀社の方" aria-pressed="false">葬儀社の方</button>
-          <button type="button" class="chip" data-value="その他" aria-pressed="false">その他</button>
-        </div>
-      </fieldset>
+      <p class="form-notice" data-funeral-notice hidden>葬儀社さまからのお問い合わせとして承ります。</p>
 
       <label class="field"><span class="field-label">お名前 *</span><input name="name" autocomplete="name"><span class="field-err" data-err="name"></span></label>
+      <label class="field"><span class="field-label">ふりがな *</span><input name="kana"><span class="field-err" data-err="kana"></span></label>
       <label class="field"><span class="field-label">メールアドレス *</span><input name="email" type="email" autocomplete="email"><span class="field-err" data-err="email"></span></label>
       <label class="field"><span class="field-label">メールアドレス（確認） *</span><input name="email2" type="email" autocomplete="email"><span class="field-err" data-err="email2"></span></label>
-      <label class="field"><span class="field-label">電話番号</span><input name="tel" type="tel" autocomplete="tel"></label>
-      <label class="field" data-family-only><span class="field-label">ご紹介元の葬儀社名</span><input name="home"></label>
+      <label class="field"><span class="field-label">電話番号</span><input name="tel" type="tel" autocomplete="tel"><span class="field-err" data-err="tel"></span></label>
 
       <fieldset class="field">
-        <legend class="field-label">気になるモチーフ</legend>
-        <div class="chips" data-chips="motif">
-          <button type="button" class="chip" data-value="鳥" aria-pressed="false">鳥</button>
-          <button type="button" class="chip" data-value="花" aria-pressed="false">花</button>
-          <button type="button" class="chip" data-value="星" aria-pressed="false">星</button>
-          <button type="button" class="chip is-on" data-value="まだ決めていない" aria-pressed="true">まだ決めていない</button>
+        <legend class="field-label">ご連絡方法の希望 *</legend>
+        <div class="chips" data-chips="contact" role="radiogroup">
+          <button type="button" class="chip" data-value="メールでのご連絡を希望" aria-pressed="false">メール</button>
+          <button type="button" class="chip" data-value="お電話でのご連絡を希望" aria-pressed="false">お電話</button>
+          <button type="button" class="chip" data-value="その他" data-other aria-pressed="false">その他</button>
+        </div>
+        <input name="contactOther" class="other-input" aria-label="ご連絡方法（その他）" placeholder="ご希望の連絡方法" hidden>
+        <span class="field-err" data-err="contact"></span>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="field-label">お問い合わせの種類 *</legend>
+        <div class="chips" data-chips="kind" role="radiogroup">
+          <button type="button" class="chip" data-value="まずは相談してみたい（ご質問・ご不安な点など）" aria-pressed="false">まずは相談してみたい（ご質問・ご不安な点など）</button>
+          <button type="button" class="chip" data-value="お申し込みについて詳しく知りたい" aria-pressed="false">お申し込みについて詳しく知りたい</button>
+          <button type="button" class="chip" data-value="資料を送ってほしい" aria-pressed="false">資料を送ってほしい</button>
+          <button type="button" class="chip" data-value="その他" data-other aria-pressed="false">その他</button>
+        </div>
+        <input name="kindOther" class="other-input" aria-label="お問い合わせの種類（その他）" placeholder="お問い合わせの内容" hidden>
+        <span class="field-err" data-err="kind"></span>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend class="field-label">ご希望のサイズ（現時点でのお考え）</legend>
+        <div class="chips" data-chips="size" data-optional role="radiogroup">
+          <button type="button" class="chip" data-value="0.3ct" aria-pressed="false">0.3ct</button>
+          <button type="button" class="chip" data-value="0.5ct" aria-pressed="false">0.5ct</button>
+          <button type="button" class="chip" data-value="0.7ct" aria-pressed="false">0.7ct</button>
+          <button type="button" class="chip" data-value="1.0ct" aria-pressed="false">1.0ct</button>
+          <button type="button" class="chip" data-value="迷っている・未定" aria-pressed="false">迷っている・未定</button>
         </div>
       </fieldset>
 
-      <label class="field"><span class="field-label">ご相談内容 *</span><textarea name="body" rows="5"></textarea><span class="field-err" data-err="body"></span></label>
+      <fieldset class="field">
+        <legend class="field-label">お預かりする素材（現時点でのお考え）</legend>
+        <div class="chips" data-chips="material" data-optional role="radiogroup">
+          <button type="button" class="chip" data-value="ご遺骨" aria-pressed="false">ご遺骨</button>
+          <button type="button" class="chip" data-value="毛髪" aria-pressed="false">毛髪</button>
+          <button type="button" class="chip" data-value="迷っている・未定" aria-pressed="false">迷っている・未定</button>
+        </div>
+      </fieldset>
+
+      <label class="field">
+        <span class="field-label">お問い合わせ・ご相談内容</span>
+        <span class="field-help">些細なご質問や、お品物に対するご要望、現在の状況（四十九日や一周忌を控えているなど）について、ご自由にお書きください。お預かりするご遺骨や毛髪の量（約2〜3グラム）、結晶化に関するご不安など、パンフレットをご覧になって気になった点などもお気軽にご記載ください。</span>
+        <textarea name="body" rows="5"></textarea>
+      </label>
 
       <div class="field">
         <label class="agree"><input type="checkbox" name="agree"><span><a href="#">プライバシーポリシー</a>に同意する *</span></label>

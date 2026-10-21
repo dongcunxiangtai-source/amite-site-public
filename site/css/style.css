@@ -365,7 +365,9 @@ label.field .field-label { margin-bottom: 0; }
   border: 1px solid var(--c-border-strong); background: transparent; color: var(--c-text);
   font-size: 14px; letter-spacing: 0.08em; cursor: pointer; transition: all .3s;
 }
-.chips[data-chips=motif] .chip { padding: 0 18px; }
+.chip { min-height: 40px; height: auto; padding: 8px 18px; line-height: 1.6; text-align: left; }
+.other-input[hidden] { display: none; }
+.field-help { font-size: 12px; line-height: 1.9; letter-spacing: 0.04em; color: var(--c-secondary); }
 .chip.is-on { border-color: var(--c-primary); background: var(--c-primary); color: #fff; }
 .agree { display: flex; gap: 12px; align-items: center; font-size: 13px; letter-spacing: 0.05em; cursor: pointer; }
 .agree input { width: 18px; height: 18px; accent-color: var(--c-primary); margin: 0; flex: none; }
@@ -460,8 +462,7 @@ label.field .field-label { margin-bottom: 0; }
 
 @media (max-width: 380px) {
   .hero-title { font-size: 23px; letter-spacing: 0.1em; }
-  .chip { padding: 0 14px; }
-  .chips[data-chips=motif] .chip { padding: 0 14px; }
+  .chip { padding: 8px 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
