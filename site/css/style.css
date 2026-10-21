@@ -209,7 +209,6 @@ br.sp-only { display: none; }
 .motif-meta { display: flex; gap: 16px; font-size: 13px; letter-spacing: 0.08em; color: var(--c-secondary); }
 .motif-desc { display: flex; flex-direction: column; gap: 4px; font-size: 16px; line-height: 2; letter-spacing: 0.05em; min-height: 128px; }
 .motif-desc p { margin: 0; }
-.motif-spec { font-size: 13px; letter-spacing: 0.05em; color: var(--c-secondary); border-top: 1px solid var(--c-border); padding-top: 20px; }
 
 /* ---------- Engraving ---------- */
 .engraving {
