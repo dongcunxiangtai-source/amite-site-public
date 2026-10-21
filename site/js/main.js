@@ -139,6 +139,24 @@
     $$('.disclosure-panel.is-open').forEach(p => { p.style.maxHeight = p.scrollHeight + 'px'; });
   });
 
+  /* ---------- FAQ（開閉をなめらかに） ---------- */
+  $$('.faq-item').forEach(d => {
+    const answer = $('.faq-a', d);
+    $('summary', d).addEventListener('click', e => {
+      e.preventDefault();
+      const opening = !d.open;
+      d.classList.toggle('is-open', opening);
+      if (reduceMotion) { d.open = opening; return; }
+      if (opening) d.open = true;
+      answer.style.height = (opening ? 0 : answer.scrollHeight) + 'px';
+      requestAnimationFrame(() => requestAnimationFrame(() => { answer.style.height = (opening ? answer.scrollHeight : 0) + 'px'; }));
+      answer.addEventListener('transitionend', () => {
+        if (!opening) d.open = false;
+        answer.style.height = '';
+      }, { once: true });
+    });
+  });
+
   /* ---------- Collection ---------- */
   const motifBtns = $$('.motif-btn');
   const motifImgs = $$('.motif-img');
