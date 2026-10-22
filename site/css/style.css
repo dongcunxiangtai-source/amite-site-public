@@ -213,6 +213,15 @@ br.sp-only { display: none; }
 .motif-desc { display: flex; flex-direction: column; gap: 4px; font-size: 16px; line-height: 2; letter-spacing: 0.05em; min-height: 128px; }
 .motif-desc p { margin: 0; }
 
+.price { display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--c-border); padding-top: 24px; }
+.price-title { font-family: var(--f-en); font-size: 13px; letter-spacing: 0.36em; color: var(--c-secondary); }
+.price-list { margin: 0; font-variant-numeric: lining-nums; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 32px; }
+.price-list div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid #EDEDED; }
+.price-list dt { font-family: var(--f-en); font-size: 16px; letter-spacing: 0.06em; color: var(--c-secondary); }
+.price-list dd { margin: 0; font-family: var(--f-en); font-size: 19px; letter-spacing: 0.04em; color: var(--c-primary); }
+.price-list dd span { font-family: var(--f-ja); font-size: 11px; letter-spacing: 0.04em; color: var(--c-secondary); }
+.price-note { margin: 0; font-size: 12px; letter-spacing: 0.06em; color: var(--c-secondary); }
+
 /* ---------- Engraving ---------- */
 .engraving {
   background: var(--c-neutral);
@@ -523,6 +532,7 @@ label.field .field-label { margin-bottom: 0; }
   .motif-panel { gap: 28px; }
   .motif-en { font-size: 36px; }
   .motif-desc { font-size: 15px; min-height: 0; }
+  .price-list { grid-template-columns: minmax(0, 1fr); }
   .engraving { padding-top: 88px; padding-bottom: 88px; gap: 40px; }
   .engraving-body { gap: 28px; }
   .questions li { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 24px 0; }
