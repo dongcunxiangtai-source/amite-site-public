@@ -182,6 +182,80 @@
     s.addEventListener('mouseenter', () => pickStep(i));
   });
 
+  /* ---------- 冊子ビューア（めくれる表示） ---------- */
+  const viewer = $('#booklet-viewer');
+  if (viewer) {
+    const PAGES = Array.from({ length: 8 }, (_, i) => `assets/booklet/p${i + 1}.jpg`);
+    const pageNo = $('[data-bk-page]', viewer);
+    const prevBtn = $('[data-bk-prev]', viewer);
+    const nextBtn = $('[data-bk-next]', viewer);
+    let book = null, libLoading = null, lastFocusBk = null;
+
+    // ライブラリ（StPageFlip, MIT）は初めて開いたときだけ読み込む
+    const loadLib = () => libLoading || (libLoading = new Promise((resolve, reject) => {
+      const sc = document.createElement('script');
+      sc.src = 'js/vendor/page-flip.browser.js';
+      sc.onload = resolve; sc.onerror = reject;
+      document.head.appendChild(sc);
+    }));
+    const updateNav = i => {
+      // 見開き表示のときは「2–3」のように左右のページ番号を出す
+      const spread = book && book.getOrientation() === 'landscape' && i > 0 && i < PAGES.length - 1;
+      const left = spread && i % 2 === 0 ? i - 1 : i;
+      pageNo.textContent = spread ? `${left + 1}–${left + 2}` : String(i + 1);
+      prevBtn.disabled = i <= 0;
+      nextBtn.disabled = i >= PAGES.length - 1;
+    };
+    const openViewer = async () => {
+      lastFocusBk = document.activeElement;
+      setMenu(false);
+      document.body.classList.add('is-locked');
+      viewer.classList.add('is-open');
+      viewer.setAttribute('aria-hidden', 'false');
+      $('[data-close-booklet]', viewer).focus({ preventScroll: true });
+      if (book) return;
+      try {
+        await loadLib();
+        const el = $('#bk-book');
+        el.innerHTML = PAGES.map((src, i) => `<div class="bk-page"><img src="${src}" alt="冊子 ${i + 1}ページ"></div>`).join('');
+        book = new window.St.PageFlip(el, {
+          width: 420, height: 595, size: 'stretch',
+          minWidth: 300, maxWidth: 1000, minHeight: 300, maxHeight: 1416,
+          showCover: true, usePortrait: true, autoSize: false,
+          maxShadowOpacity: 0.35, flippingTime: 900, mobileScrollSupport: false
+        });
+        book.on('init', () => viewer.classList.add('is-ready'));
+        book.on('flip', e => updateNav(e.data));
+        book.on('changeOrientation', () => updateNav(book.getCurrentPageIndex()));
+        book.loadFromHTML($$('.bk-page', el));
+        updateNav(0);
+      } catch (err) {
+        $('.bk-loading', viewer).textContent = '読み込めませんでした。PDFをダウンロードしてご覧ください。';
+      }
+    };
+    const closeViewer = () => {
+      if (!viewer.classList.contains('is-open')) return;
+      document.body.classList.remove('is-locked');
+      viewer.classList.remove('is-open');
+      viewer.setAttribute('aria-hidden', 'true');
+      if (lastFocusBk) lastFocusBk.focus({ preventScroll: true });
+    };
+
+    $$('[data-open-booklet]').forEach(el => el.addEventListener('click', openViewer));
+    $('[data-close-booklet]', viewer).addEventListener('click', closeViewer);
+    // ビューアから申し込みへ進むときは、先にビューアを閉じる
+    $$('[data-open-contact]', viewer).forEach(el => el.addEventListener('click', closeViewer));
+    prevBtn.addEventListener('click', () => book && book.flipPrev());
+    nextBtn.addEventListener('click', () => book && book.flipNext());
+    document.addEventListener('keydown', e => {
+      if (!viewer.classList.contains('is-open')) return;
+      if (e.key === 'Escape') closeViewer();
+      if (!book) return;
+      if (e.key === 'ArrowLeft') book.flipPrev();
+      if (e.key === 'ArrowRight') book.flipNext();
+    });
+  }
+
   /* ---------- お問い合わせ ---------- */
   const modal = $('#contact-modal');
   if (modal) {

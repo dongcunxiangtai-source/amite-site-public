@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261022a">
-<script src="js/main.js?v=20261022a" defer></script>
+<link rel="stylesheet" href="css/style.css?v=20261022b">
+<script src="js/main.js?v=20261022b" defer></script>
 </head>
 <body>
 
@@ -192,13 +192,18 @@
 
   <section class="info rv" id="funeral" data-reveal>
     <div class="info-col info-booklet">
-      <div class="booklet-frame">
+      <button type="button" class="booklet-frame booklet-open" data-open-booklet aria-label="冊子の中を見る">
         <img src="assets/booklet-cover.jpg" alt="冊子『大切な人を亡くしたあとに起こることについて』表紙" loading="lazy">
-      </div>
+        <span class="booklet-hint">中を見る</span>
+      </button>
       <div class="eyebrow">BOOKLET</div>
       <h3 class="subheading">はじめての方へ、一冊の冊子を。</h3>
       <p class="body-md">『大切な人を亡くしたあとに起こることについて』<br>見送りのあとに訪れる手続きや気持ちの変化を、全8章にまとめた冊子です。葬儀社さまを通じて、お渡ししています。<br>葬儀社さまを通さずにご希望の方にも、お送りいたします。</p>
-      <button type="button" class="btn-outline btn-start" data-open-contact="booklet">冊子を申し込む</button>
+      <div class="booklet-actions">
+        <button type="button" class="btn-outline" data-open-contact="booklet">冊子を申し込む</button>
+        <button type="button" class="text-link link-btn" data-open-booklet>冊子の中を見る</button>
+        <a href="assets/booklet/amite-booklet.pdf" class="text-link" download>PDFをダウンロード</a>
+      </div>
     </div>
     <div class="info-col info-funeral">
       <div class="eyebrow">FOR FUNERAL HOMES</div>
@@ -251,6 +256,25 @@
   </div>
   <div class="footer-copy">© amite</div>
 </footer>
+
+<div class="bk-viewer" id="booklet-viewer" aria-hidden="true">
+  <div class="bk-panel" role="dialog" aria-modal="true" aria-label="冊子『大切な人を亡くしたあとに起こることについて』">
+    <div class="bk-head">
+      <div class="bk-title"><span class="bk-title-en">Booklet</span><span class="bk-title-ja">大切な人を亡くしたあとに起こることについて</span></div>
+      <button type="button" class="bk-close" data-close-booklet>閉じる</button>
+    </div>
+    <div class="bk-stage"><div class="bk-book" id="bk-book"></div><span class="bk-loading">読み込み中…</span></div>
+    <div class="bk-foot">
+      <button type="button" class="bk-nav" data-bk-prev aria-label="前のページ">←</button>
+      <span class="bk-count"><span data-bk-page>1</span> / 8</span>
+      <button type="button" class="bk-nav" data-bk-next aria-label="次のページ">→</button>
+    </div>
+    <div class="bk-links">
+      <a href="assets/booklet/amite-booklet.pdf" class="text-link" download>PDFをダウンロード</a>
+      <button type="button" class="text-link link-btn" data-open-contact="booklet">冊子を申し込む</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal" id="contact-modal" aria-hidden="true">
   <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
