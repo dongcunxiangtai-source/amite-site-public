@@ -240,7 +240,7 @@ br.sp-only { display: none; }
 .process-head { display: flex; flex-wrap: wrap; gap: 24px 40px; justify-content: space-between; align-items: flex-end; }
 .process-lead { display: flex; flex-direction: column; gap: 20px; }
 .process-lead p { margin: 0; font-size: 16px; line-height: 32px; letter-spacing: 0.05em; }
-.steps { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 16px; }
 .step {
   text-align: left; background: none; border: none;
   border-top: 1px solid var(--c-border); padding: 20px 0 0; cursor: pointer;
@@ -459,7 +459,6 @@ label.field .field-label { margin-bottom: 0; }
 @media (max-width: 1080px) {
   .engraving { grid-template-columns: minmax(0, 1fr); }
   .engraving-body { padding-left: 0; }
-  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 28px; }
 }
 
 @media (max-width: 900px) {
