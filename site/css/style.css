@@ -231,14 +231,26 @@ br.sp-only { display: none; }
 }
 .engraving-body { display: flex; flex-direction: column; gap: 36px; padding-left: clamp(0px, 4vw, 80px); max-width: 560px; }
 .engraving .note { margin: 0; font-size: 14px; line-height: 2; letter-spacing: 0.05em; color: var(--c-secondary); }
+.sheet-qs { display: flex; flex-direction: column; gap: 20px; }
+.sheet-qs-lead { margin: 0; font-size: 13px; letter-spacing: 0.16em; color: var(--c-secondary); }
 .questions { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
-.questions li {
+.questions > li {
   display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 16px;
-  padding: 32px 0; border-top: 1px solid #D6D6D6;
+  padding: 30px 0; border-top: 1px solid #D6D6D6;
 }
-.questions li:last-child { border-bottom: 1px solid #D6D6D6; }
-.q-no { font-family: var(--f-en); font-style: italic; font-size: 22px; color: var(--c-secondary); }
-.q-text { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.9; letter-spacing: 0.06em; color: var(--c-primary); }
+.questions > li:last-child { border-bottom: 1px solid #D6D6D6; }
+.q-no { font-size: 20px; line-height: 1.6; color: var(--c-secondary); }
+.q-body { display: flex; flex-direction: column; gap: 8px; }
+.q-text { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; letter-spacing: 0.1em; color: var(--c-primary); }
+.q-sub { font-size: 14px; line-height: 2; letter-spacing: 0.05em; color: var(--c-secondary); }
+.q-words { margin: 2px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, max-content); gap: 10px 32px; }
+.q-words li { display: flex; align-items: center; gap: 8px; font-size: 14px; letter-spacing: 0.06em; color: var(--c-text); }
+.q-words li::before { content: ''; width: 12px; height: 12px; border: 1px solid #A8A8A8; flex: none; }
+.q-group { margin-top: 10px; font-size: 12px; letter-spacing: 0.12em; color: var(--c-secondary); }
+.q-words-2 { grid-template-columns: repeat(2, max-content); }
+.sheet-dl { align-self: flex-start; font-size: 13px; letter-spacing: 0.1em; }
+.step-panel .sheet-dl { display: inline-block; margin-top: 4px; }
+.sheet-qs-note { margin: 0; font-size: 13px; line-height: 2; letter-spacing: 0.05em; color: var(--c-secondary); }
 
 /* ---------- Process ---------- */
 .process {
@@ -268,8 +280,22 @@ br.sp-only { display: none; }
 .step-big { font-family: var(--f-en); font-size: 72px; line-height: 1; letter-spacing: 0.04em; color: var(--c-primary); }
 .step-title { font-size: 20px; line-height: 34px; letter-spacing: 0.06em; color: var(--c-primary); }
 .step-panel p { margin: 0; font-size: 15px; line-height: 30px; letter-spacing: 0.05em; min-height: 60px; }
-.process-media { aspect-ratio: 3 / 2; overflow: hidden; background: var(--c-neutral); }
-.process-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.process-media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: var(--c-neutral); }
+.process-photo { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .8s ease; }
+.sheet-preview { position: absolute; inset: 0; background: #EFEEEA; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+.sheet-page {
+  position: absolute; top: 6%; height: 70%; width: auto; aspect-ratio: 990 / 1400; object-fit: cover;
+  box-shadow: 0 18px 40px #0000001F, 0 2px 6px #00000014; transition: transform 1.2s ease;
+}
+.sheet-page-1 { left: 22%; transform: rotate(-5deg) translateY(10px); }
+.sheet-page-2 { left: 44%; transform: rotate(2deg); }
+.sheet-caption { position: absolute; left: 0; right: 0; bottom: 5%; text-align: center; font-size: 12px; letter-spacing: 0.14em; color: var(--c-secondary); }
+.process-detail.is-sheet .process-photo { opacity: 0; }
+.process-detail.is-sheet .sheet-preview { opacity: 1; pointer-events: auto; }
+.sheet-preview { display: block; text-decoration: none; }
+.sheet-preview:hover .sheet-page-2 { transform: rotate(2deg) translate(6px, -6px); }
+.process-detail.is-sheet .sheet-page-1 { transform: rotate(-6deg) translate(-4px, 4px); }
+.process-detail.is-sheet .sheet-page-2 { transform: rotate(3deg) translateX(6px); }
 
 /* ---------- Booklet / Funeral ---------- */
 .info {
@@ -585,7 +611,10 @@ label.field .field-label { margin-bottom: 0; }
   .price-list { grid-template-columns: minmax(0, 1fr); }
   .engraving { padding-top: 88px; padding-bottom: 88px; gap: 40px; }
   .engraving-body { gap: 28px; }
-  .questions li { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 24px 0; }
+  .questions > li { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 24px 0; }
+  .q-words { grid-template-columns: repeat(2, max-content); gap: 10px 20px; }
+  .q-words-2 { grid-template-columns: minmax(0, 1fr); }
+  .sheet-caption { font-size: 11px; }
   .process { padding-top: 88px; padding-bottom: 88px; gap: 40px; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
   .step { padding-top: 14px; }

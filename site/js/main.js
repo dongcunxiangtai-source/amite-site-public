@@ -171,7 +171,20 @@
 
   /* ---------- Process ---------- */
   const steps = $$('.step');
-  const pickStep = i => steps.forEach((s, j) => {
+  const processDetail = $('.process-detail');
+  // 工程04「言葉を選ぶ時間」のときは、画像の代わりにシートのプレビューを出す
+  const SHEET_STEP = 3;
+  // 工程ごとの画像は、パネルの data-img で差し替えられる（未指定なら共通の写真）
+  const processPhoto = $('.process-photo');
+  const defaultPhoto = processPhoto && processPhoto.getAttribute('src');
+  const pickStep = i => {
+    if (processDetail) processDetail.classList.toggle('is-sheet', i === SHEET_STEP);
+    const panel = steps[i] && document.getElementById(steps[i].getAttribute('aria-controls'));
+    const src = (panel && panel.dataset.img) || defaultPhoto;
+    if (processPhoto && src && processPhoto.getAttribute('src') !== src) processPhoto.setAttribute('src', src);
+    pickStepTabs(i);
+  };
+  const pickStepTabs = i => steps.forEach((s, j) => {
     s.classList.toggle('is-active', j === i);
     s.classList.toggle('is-done', j <= i);
     s.setAttribute('aria-selected', String(j === i));
