@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261023b">
-<script src="js/main.js?v=20261023b" defer></script>
+<link rel="stylesheet" href="css/style.css?v=20261023c">
+<script src="js/main.js?v=20261023c" defer></script>
 </head>
 <body>
 
@@ -227,25 +227,29 @@
 
   <section class="info rv" id="funeral" data-reveal>
     <div class="info-col info-booklet">
-      <button type="button" class="booklet-frame booklet-open" data-open-booklet aria-label="冊子の中を見る">
+      <button type="button" class="booklet-frame booklet-open" data-open-booklet aria-label="冊子をオンラインで読む">
         <img src="assets/booklet-cover.jpg" alt="冊子『大切な人を亡くしたあとに起こることについて』表紙" loading="lazy">
-        <span class="booklet-hint">中を見る</span>
+        <span class="booklet-hint">オンラインで読む</span>
       </button>
       <div class="eyebrow">BOOKLET</div>
       <h3 class="subheading">はじめての方へ、一冊の冊子を。</h3>
       <p class="body-md">『大切な人を亡くしたあとに起こることについて』<br>見送りのあとに訪れる手続きや気持ちの変化を、全8章にまとめた冊子です。葬儀社さまを通じて、お渡ししています。<br>葬儀社さまを通さずにご希望の方にも、お送りいたします。</p>
-      <div class="booklet-actions">
-        <button type="button" class="btn-outline" data-open-contact="booklet">冊子を申し込む</button>
-        <button type="button" class="text-link link-btn" data-open-booklet>冊子の中を見る</button>
-        <a href="assets/booklet/amite-booklet.pdf" class="text-link" download>PDFをダウンロード</a>
+      <div class="cta-group">
+        <button type="button" class="btn-outline cta-main" data-open-contact="booklet">冊子を取り寄せる</button>
+        <div class="cta-links">
+          <button type="button" class="text-link link-btn" data-open-booklet>オンラインで読む</button>
+          <a href="assets/booklet/amite-booklet.pdf" class="text-link" download>PDFで保存する</a>
+        </div>
       </div>
     </div>
     <div class="info-col info-funeral">
       <div class="eyebrow">FOR FUNERAL HOMES</div>
       <h3 class="subheading">amiteは、お客様からの<br>ご紹介を大切にしています。</h3>
-      <div class="fh-actions">
-        <a href="#" class="text-link" data-toggle="fh" data-hover-open aria-expanded="false" aria-controls="fh" data-label-open="葬儀社の方へ" data-label-close="閉じる">葬儀社の方へ</a>
-        <button type="button" class="btn-outline" data-open-contact="funeral">葬儀社さまのお問い合わせ</button>
+      <div class="cta-group">
+        <button type="button" class="btn-outline cta-main" data-open-contact="funeral">葬儀社さま専用のお問い合わせ</button>
+        <div class="cta-links">
+          <a href="#" class="text-link" data-toggle="fh" data-hover-open aria-expanded="false" aria-controls="fh" data-label-open="葬儀社さまへのメッセージを読む" data-label-close="メッセージを閉じる">葬儀社さまへのメッセージを読む</a>
+        </div>
       </div>
       <div class="disclosure-panel" id="fh">
         <div class="fh-message">
@@ -305,8 +309,8 @@
       <button type="button" class="bk-nav" data-bk-next aria-label="次のページ">→</button>
     </div>
     <div class="bk-links">
-      <a href="assets/booklet/amite-booklet.pdf" class="text-link" download>PDFをダウンロード</a>
-      <button type="button" class="text-link link-btn" data-open-contact="booklet">冊子を申し込む</button>
+      <a href="assets/booklet/amite-booklet.pdf" class="text-link" download>PDFで保存する</a>
+      <button type="button" class="text-link link-btn" data-open-contact="booklet">冊子を取り寄せる</button>
     </div>
   </div>
 </div>
